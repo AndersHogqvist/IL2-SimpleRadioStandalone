@@ -53,9 +53,12 @@ namespace Ciribob.IL2.SimpleRadio.Standalone.Client.Network.IL2
                 while (!_stop)
                 {
                     var localEp = new IPEndPoint(IPAddress.Any, _globalSettings.GetNetworkSetting(GlobalSettingsKeys.IL2IncomingUDP));
+                    _il2UdpListener = new UdpClient();
+                    _il2UdpListener.ExclusiveAddressUse = false;
+                    _il2UdpListener.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
                     try
                     {
-                        _il2UdpListener = new UdpClient(localEp);
+                        _il2UdpListener.Client.Bind(localEp);
                         break;
                     }
                     catch (Exception ex)
